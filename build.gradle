@@ -1,0 +1,41 @@
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project('ProjectJava8') {
+    dependencies {
+        implementation project(':ProjectJava11')
+        implementation files('../ProjectJava11Jar/ProjectJava11Jar.jar')
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(8)
+        }
+    }
+}
+
+project('ProjectJava11') {
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(11)
+        }
+    }
+}
+
+project('ProjectJava11Jar') {
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(11)
+        }
+    }
+
+    task copyJar(type: Copy, dependsOn: jar) {
+        from("build/libs/ProjectJava11Jar.jar")
+        into("./")
+    }
+}
